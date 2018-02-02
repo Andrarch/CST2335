@@ -3,4 +3,10 @@
     <string name="app_name">Lab1</string>
     <string name="hello_message">Hello Canada!</string>
     <string name="ButtonText">I\'m a canadian button</string>
+    <string name="Login">CDN Login</string>
+    <string name="Password">CDN Password</string>
+    <string name="RadioButton">Canadian RadioButton</string>
+    <string name="CheckBox">Canadian CheckBox</string>
+    <string name="Switch">Canadian What does this do?</string>
+    <string name="ImageDescription">Canadian Camera</string>
 </resources>
