@@ -9,4 +9,13 @@
     <string name="CheckBox">Canadian CheckBox</string>
     <string name="Switch">Canadian What does this do?</string>
     <string name="ImageDescription">Canadian Camera</string>
+
+    <string name="LoginButton">CDN Log In</string>
+    <string name="LoginHint">CDN Log in name</string>
+    <string name="LoginInput"></string>
+    <string name="dialog_message">CDN Do you wish to end the activity?</string>
+    <string name="dialog_title">CDN Menu</string>
+    <string name="ok">Yes</string>
+    <string name="cancel">No</string>
+
 </resources>
