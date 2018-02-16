@@ -8,7 +8,6 @@
     <string name="CheckBox">CheckBox</string>
     <string name="Switch">What does this do?</string>
     <string name="ImageDescription">Camera</string>
-
-
-
+    <string name="LoginButton">Log In</string>
+    <string name="LoginHint">Log in name</string>
 </resources>
