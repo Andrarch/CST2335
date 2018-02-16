@@ -11,22 +11,25 @@ import android.widget.TextView;
 
 public class LoginActivity extends Activity {
     protected static final String ACTIVITY_NAME = "LoginActivity";
-    
+
+   // SharedPreferences preferences = this.getSharedPreferences("CST2355Lab3",MODE_PRIVATE);
 
   @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Log.i(ACTIVITY_NAME, "In onCreate()");
+        LoadPreferences();
         Button logInButton=(Button)findViewById(R.id.LoginButton);
         logInButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                TextView Login=(TextView) findViewById(R.id.LoginName);
-                String save=Login.getText().toString();
-                editor.putString("EMAIL", Login.getText().toString());
-                editor.commit();
+
+
+                TextView LoginText=findViewById(R.id.LoginName);
+                String LoginSet = LoginText.getText().toString();
+
+                getPreferences(MODE_PRIVATE).edit().putString("EMAIL",LoginSet).commit();
+
 
                 Intent intent = new Intent(LoginActivity.this, StartActivity.class);
                 startActivity(intent);
@@ -61,10 +64,12 @@ public class LoginActivity extends Activity {
     }
     private void LoadPreferences(){
 
-        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
-        String Login2 = sharedPreferences.getString("EMAIL", "email@domain.com");
-        TextView Login=(TextView) findViewById(R.id.LoginName);
-        Login.setText(Login2);
+        //SharedPreferences preferences = this.getSharedPreferences("CST2355Lab3",MODE_PRIVATE);
+        String email = getPreferences(MODE_PRIVATE).getString("EMAIL","Example@Email.com");
+
+
+        TextView LoginText=findViewById(R.id.LoginName);
+        LoginText.setText(email);
     }
 
 }
