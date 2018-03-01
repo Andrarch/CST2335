@@ -10,4 +10,9 @@
     <string name="ImageDescription">Camera</string>
     <string name="LoginButton">Log In</string>
     <string name="LoginHint">Log in name</string>
+    <string name="LoginInput"></string>
+    <string name="dialog_message">Do you wish to end the activity?</string>
+    <string name="dialog_title">Menu</string>
+    <string name="ok">Yes</string>
+    <string name="cancel">No</string>
 </resources>

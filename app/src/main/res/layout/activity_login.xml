@@ -14,6 +14,7 @@
 
     <EditText
         android:id="@+id/LoginName"
+        android:text="@string/LoginInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/LoginHint"

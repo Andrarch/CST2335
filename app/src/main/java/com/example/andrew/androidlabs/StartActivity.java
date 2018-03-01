@@ -1,16 +1,33 @@
 package com.example.andrew.androidlabs;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class StartActivity extends Activity {
+
+
     protected static final String ACTIVITY_NAME = "StartActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         Log.i(ACTIVITY_NAME, "In onCreate()");
+        Button button=(Button)findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                 //   Intent data;
+                //int requestCode=0,responseCode=0;
+                Intent intent = new Intent(StartActivity.this, ListItemsActivity.class);
+
+                startActivityForResult(intent,50);
+
+            }});
     }
     @Override
     protected void onResume(){
@@ -37,6 +54,14 @@ public class StartActivity extends Activity {
         super.onDestroy();
         Log.i(ACTIVITY_NAME, "In onDestroy()");
     }
-
+    @Override
+    protected void onActivityResult(int requestCode, int responseCode, Intent data){
+       if(requestCode==50) Log.i(ACTIVITY_NAME, "Returned to StartActivity.onActivityResult");
+        if (responseCode==Activity.RESULT_OK) {
+            String messagePassed = data.getStringExtra("Response");
+            Toast toast = Toast.makeText(StartActivity.this, messagePassed, Toast.LENGTH_LONG); //this is the ListActivity
+            toast.show(); //display your message box
+        }
+    }
 
 }
