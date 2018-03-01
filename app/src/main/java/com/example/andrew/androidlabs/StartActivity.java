@@ -28,6 +28,12 @@ public class StartActivity extends Activity {
                 startActivityForResult(intent,50);
 
             }});
+        Button chatButton=(Button)findViewById(R.id.chatButton);
+            chatButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Log.i(ACTIVITY_NAME,"User clicked Start Chat");
+
+            }});
     }
     @Override
     protected void onResume(){
