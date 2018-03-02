@@ -32,7 +32,9 @@ public class StartActivity extends Activity {
             chatButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Log.i(ACTIVITY_NAME,"User clicked Start Chat");
+                Intent intent = new Intent(StartActivity.this, ChatWindow.class);
 
+                startActivity(intent);
             }});
     }
     @Override
