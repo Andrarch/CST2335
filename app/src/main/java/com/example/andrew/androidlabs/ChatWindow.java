@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,7 +18,8 @@ public class ChatWindow extends Activity {
     ListView javaListView;
     Button javaSendButton;
     ArrayList<String> javaMessages=new ArrayList<String>();
-    TextView javaText;
+    AutoCompleteTextView javaText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +28,7 @@ public class ChatWindow extends Activity {
         javaSendButton=(Button)findViewById(R.id.sendButton);
         ChatAdapter messageAdapter =new ChatAdapter( this );
         javaListView.setAdapter (messageAdapter);
-        javaText=(TextView)findViewById(R.id.autoCompleteTextView);
+        javaText=(AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
         javaSendButton.setOnClickListener(temp->{
             String tempString=javaText.getText().toString();
             javaMessages.add(tempString);
@@ -54,7 +56,7 @@ public class ChatWindow extends Activity {
                 result = inflater.inflate(R.layout.chat_row_incoming, null);
             else
                 result = inflater.inflate(R.layout.chat_row_outgoing, null);
-            TextView message = (TextView)result.findViewById(R.id.autoCompleteTextView);
+            TextView message = (TextView)result.findViewById(R.id.textView);
             message.setText(   getItem(position)  ); // get the string at position
             return result;
 

@@ -26,7 +26,7 @@
         android:layout_alignStart="@+id/listView"
 
         android:layout_toLeftOf="@+id/sendButton"
-        android:text="AutoCompleteTextView"
+
         android:layout_marginStart="10dp"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
@@ -42,5 +42,5 @@
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:text="Button" />
+        android:text="@string/sendMessage" />
 </RelativeLayout>
