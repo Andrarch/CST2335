@@ -11,10 +11,11 @@ import android.util.Log;
 
 public class ChatDatabaseHelper extends SQLiteOpenHelper {
     static String DATABASE_NAME="Messages.db";
-    static int VERSION_NUMBER=4;
+    static int VERSION_NUMBER=5;
     static String KEY_MESSAGE="Message";
     static String KEY_ID="id";
     private static String TABLE_NAME="MessageTable";
+    static String ACTIVITY_NAME="ChatWindow";
     private static final String DATABASE_CREATE = "create table "
             + TABLE_NAME + "( " + KEY_ID
             + " integer primary key autoincrement, " + KEY_MESSAGE
