@@ -17,5 +17,7 @@
     <string name="dialog_title">CDN Menu</string>
     <string name="ok">Yes</string>
     <string name="cancel">No</string>
+    <string name="startChat">CDN Start Chat</string>
 
+    <string name="sendMessage">CDN Send</string>
 </resources>
