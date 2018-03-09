@@ -23,18 +23,22 @@ public class ChatWindow extends Activity {
     Button javaSendButton;
     ArrayList<String> javaMessages=new ArrayList<String>();
     AutoCompleteTextView javaText;
-    ChatDatabaseHelper databaseHelp=new ChatDatabaseHelper(this);
-    SQLiteDatabase database= databaseHelp.getWritableDatabase();
-    Cursor cursor=database.rawQuery("SELECT Message FROM "+ChatDatabaseHelper.getTableName(),new String[]{});
+    ChatDatabaseHelper databaseHelp;
+
+    SQLiteDatabase database;
+    Cursor cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        databaseHelp=new ChatDatabaseHelper(this);
+        database= databaseHelp.getWritableDatabase();
+        cursor=database.rawQuery("SELECT Message FROM "+ChatDatabaseHelper.getTableName(),new String[]{});
         cursor.moveToFirst();
         int column=cursor.getColumnIndex(ChatDatabaseHelper.KEY_MESSAGE);
         while(!cursor.isAfterLast() ){
             Log.i("ChatWindow", "SQL Message:" + cursor.getString( cursor.getColumnIndex( ChatDatabaseHelper.KEY_MESSAGE) ) );
             javaMessages.add(cursor.getString(column));
+            cursor.moveToNext();
         }
 
         Log.i("ChatWindow", "Cursor’s  column count =" + cursor.getColumnCount() );
