@@ -2,7 +2,10 @@ package com.example.andrew.androidlabs;
 
 import android.app.Activity;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +22,23 @@ public class ChatWindow extends Activity {
     Button javaSendButton;
     ArrayList<String> javaMessages=new ArrayList<String>();
     AutoCompleteTextView javaText;
+    ChatDatabaseHelper databaseHelp=new ChatDatabaseHelper(this);
+    SQLiteDatabase database= databaseHelp.getReadableDatabase();
+    Cursor cursor=database.rawQuery("SELECT Message FROM "+ChatDatabaseHelper.getTableName(),new String[]{});
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        cursor.moveToFirst();
+        int column=cursor.getColumnIndex(ChatDatabaseHelper.KEY_MESSAGE);
+        while(!cursor.isAfterLast() ){
+            Log.i("ChatWindow", "SQL Message:" + cursor.getString( cursor.getColumnIndex( ChatDatabaseHelper.KEY_MESSAGE) ) );
+            javaMessages.add(cursor.getString(column));
+        }
+
+        Log.i("ChatWindow", "Cursor’s  column count =" + cursor.getColumnCount() );
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_window);
         javaListView=(ListView)findViewById(R.id.listView);
@@ -37,6 +54,13 @@ public class ChatWindow extends Activity {
         });
 
 
+    }
+    @Override
+    protected void onDestroy() {
+        databaseHelp.close();
+        database.close();
+        cursor.close();
+        super.onDestroy();
     }
     public class ChatAdapter extends ArrayAdapter<String> {
         public ChatAdapter(Context ctx) {
