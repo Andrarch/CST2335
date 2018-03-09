@@ -1,6 +1,7 @@
 package com.example.andrew.androidlabs;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -23,7 +24,7 @@ public class ChatWindow extends Activity {
     ArrayList<String> javaMessages=new ArrayList<String>();
     AutoCompleteTextView javaText;
     ChatDatabaseHelper databaseHelp=new ChatDatabaseHelper(this);
-    SQLiteDatabase database= databaseHelp.getReadableDatabase();
+    SQLiteDatabase database= databaseHelp.getWritableDatabase();
     Cursor cursor=database.rawQuery("SELECT Message FROM "+ChatDatabaseHelper.getTableName(),new String[]{});
 
     @Override
@@ -46,11 +47,14 @@ public class ChatWindow extends Activity {
         ChatAdapter messageAdapter =new ChatAdapter( this );
         javaListView.setAdapter (messageAdapter);
         javaText=(AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
+        ContentValues cValues=new ContentValues();
         javaSendButton.setOnClickListener(temp->{
             String tempString=javaText.getText().toString();
             javaMessages.add(tempString);
             messageAdapter.notifyDataSetChanged();
             javaText.setText("");
+            cValues.put(ChatDatabaseHelper.KEY_MESSAGE,tempString);
+            database.insert(ChatDatabaseHelper.getTableName(),ChatDatabaseHelper.KEY_MESSAGE,cValues);
         });
 
 
