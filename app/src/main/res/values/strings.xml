@@ -16,6 +16,7 @@
     <string name="ok">Yes</string>
     <string name="cancel">No</string>
     <string name="startChat">Start Chat</string>
+    <string name="startWeather">Weather Activity</string>
 
     <string name="sendMessage">Send</string>
 </resources>

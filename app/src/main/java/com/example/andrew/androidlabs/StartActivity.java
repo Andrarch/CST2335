@@ -28,6 +28,20 @@ public class StartActivity extends Activity {
                 startActivityForResult(intent,50);
 
             }});
+
+
+        Button weatherButton=(Button)findViewById(R.id.startWeatherButton);
+        weatherButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                //   Intent data;
+                //int requestCode=0,responseCode=0;
+                Intent intent = new Intent(StartActivity.this, WeatherForecast.class);
+
+                startActivity(intent);
+
+            }});
+
+
         Button chatButton=(Button)findViewById(R.id.chatButton);
             chatButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
