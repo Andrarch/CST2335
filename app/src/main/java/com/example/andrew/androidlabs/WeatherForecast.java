@@ -51,7 +51,13 @@ public class WeatherForecast extends Activity {
                 parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
                 parser.setInput(conn.getInputStream(), null);
 
-                parser.getText();
+                parser.require(XmlPullParser.START_TAG,null,"temperature");
+                tempCurrent=parser.getAttributeValue(null,"value");
+                tempMin=parser.getAttributeValue(null,"min");
+                tempMax=parser.getAttributeValue(null,"max");
+                parser.require(XmlPullParser.START_TAG,null,"speed");
+                windSpeed=parser.getAttributeValue(null,"value");
+
 
             }catch (Exception e){
             }
