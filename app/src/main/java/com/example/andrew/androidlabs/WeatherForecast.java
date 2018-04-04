@@ -1,10 +1,12 @@
 package com.example.andrew.androidlabs;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Xml;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,6 +16,10 @@ import android.widget.TextView;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -29,21 +35,22 @@ public class WeatherForecast extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather_forecast);
-        weatherProgress=findViewById(R.id.weatherProgressBar);
+        weatherProgress = findViewById(R.id.weatherProgressBar);
         weatherProgress.setVisibility(View.VISIBLE);
-        ForecastQuery forecast=new ForecastQuery();
+        ForecastQuery forecast = new ForecastQuery();
         forecast.execute();
 
     }
 
 
-    public class ForecastQuery extends AsyncTask<String, Integer, String>{
-        String windSpeed,tempCurrent,tempMin,tempMax,bitMap;
+    public class ForecastQuery extends AsyncTask<String, Integer, String> {
+        String windSpeed, tempCurrent, tempMin, tempMax, bitMap,filename;
         Bitmap weatherImage;
 
         @Override
         protected String doInBackground(String... strings) {
             //http://api.openweathermap.org/data/2.5/weather?q=ottawa,ca&APPID=d99666875e0e51521f0040a3d97d0f6a&mode=xml&units=metric
+
             HttpURLConnection conn;
             try {
                 URL url = new URL("http://api.openweathermap.org/data/2.5/weather?q=ottawa,ca&APPID=d99666875e0e51521f0040a3d97d0f6a&mode=xml&units=metric");
@@ -53,9 +60,8 @@ public class WeatherForecast extends Activity {
                 conn.setRequestMethod("GET");
                 conn.setDoInput(true);
                 conn.connect();
-            }
-            catch (Exception e){
-                tempCurrent="Failed to connect";
+            } catch (Exception e) {
+                tempCurrent = "Failed to connect";
                 return null;
             }
             try {
@@ -63,7 +69,7 @@ public class WeatherForecast extends Activity {
                 parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
                 parser.setInput(conn.getInputStream(), null);
                 parser.nextTag();
-                tempCurrent=parser.getName();
+                tempCurrent = parser.getName();
                 while (parser.next() != XmlPullParser.END_DOCUMENT) {
                     if (parser.getEventType() != XmlPullParser.START_TAG) {
                         continue;
@@ -72,33 +78,33 @@ public class WeatherForecast extends Activity {
                     // Starts by looking for the entry tag
                     if (name.equalsIgnoreCase("temperature")) {
 
-                            tempCurrent = "Current: "+parser.getAttributeValue(null, "value");
-                            publishProgress(20);
-                            tempMin = "Min: "+parser.getAttributeValue(null, "min");
-                            publishProgress(40);
-                            tempMax = "Max: "+parser.getAttributeValue(null, "max");
-                            publishProgress(60);
+                        tempCurrent = "Current: " + parser.getAttributeValue(null, "value");
+                        publishProgress(20);
+                        tempMin = "Min: " + parser.getAttributeValue(null, "min");
+                        publishProgress(40);
+                        tempMax = "Max: " + parser.getAttributeValue(null, "max");
+                        publishProgress(60);
                     }
 
-                    if (name.equalsIgnoreCase("speed")){
-                            windSpeed="Speed: "+parser.getAttributeValue(null,"value");
+                    if (name.equalsIgnoreCase("wind")) {
+                        parser.next();
+                       windSpeed = "Speed: " + parser.getAttributeValue(null, "value");
                     }
 
-                    if (name.equalsIgnoreCase("clouds")) {
-
-                        bitMap = "http://openweathermap.org/img/w/sunny.png";
+                    if (name.equalsIgnoreCase("weather")) {
+                        filename=parser.getAttributeValue(null, "icon");
+                        filename=filename+".png";
+                       bitMap = "http://openweathermap.org/img/w/" + filename;
                         publishProgress(80);
                     }
 
                     parser.next();
 
 
+                }
 
-
-                    }
-
-                }catch(Exception e){
-                    tempMax="failure to get temps";
+            } catch (Exception e) {
+                tempMax = "failure to get temps";
             }
             setBitmap(bitMap);
             return null;
@@ -115,25 +121,56 @@ public class WeatherForecast extends Activity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             TextView tempText;
-            tempText=findViewById(R.id.weatherCurTemp);
+            tempText = findViewById(R.id.weatherCurTemp);
             tempText.setText(tempCurrent);
-            tempText=findViewById(R.id.weatherMaxTemp);
+            tempText = findViewById(R.id.weatherMaxTemp);
             tempText.setText(tempMax);
-            tempText=findViewById(R.id.weatherMinTemp);
+            tempText = findViewById(R.id.weatherMinTemp);
             tempText.setText(tempMin);
-            tempText=findViewById(R.id.weatherWind);
+            tempText = findViewById(R.id.weatherWind);
             tempText.setText(windSpeed);
             weatherProgress.setVisibility(View.INVISIBLE);
+            ImageView imageViewer = findViewById(R.id.weatherImage);
+            imageViewer.setImageBitmap(weatherImage);
+
+        }
+
+        public void setBitmap(String url) {
+
+            weatherImage=HttpUtils.getImage(url);
+            if (!fileExistance(filename)){
+                Bitmap image  = HttpUtils.getImage(filename);
+                try{
+                    FileOutputStream outputStream = openFileOutput( url, Context.MODE_PRIVATE);
+                    image.compress(Bitmap.CompressFormat.PNG, 80, outputStream);
+                    outputStream.flush();
+                    outputStream.close();
+                    Log.i("WeatherForecast", "Saving File");
+                }catch (Exception e){
+
+                }
+
+            }
+            FileInputStream fis = null;
+            try {    fis = openFileInput(filename);   }
+            catch (FileNotFoundException e) {    e.printStackTrace();  }
+            Bitmap bm = BitmapFactory.decodeStream(fis);
+            Log.i("WeatherForecast", "Loading File");
+            if(bm!=null){
+                weatherImage=bm;
+            }
 
 
         }
-    }
-    public void setBitmap(String url){
-        ImageView imageViewer=findViewById(R.id.weatherImage);
-        imageViewer.setImageBitmap(HttpUtils.getImage(url));
+
+        public boolean fileExistance(String fname) {
+            File file = getBaseContext().getFileStreamPath(fname);
+            return file.exists();
+        }
 
 
     }
+
 
     /**
      * @author Terry E-mail: yaoxinghuo at 126 dot com
@@ -167,6 +204,8 @@ public class WeatherForecast extends Activity {
                 return null;
             }
         }
+
+
     }
 
 }
