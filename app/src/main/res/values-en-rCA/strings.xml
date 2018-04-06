@@ -20,4 +20,5 @@
     <string name="startChat">CDN Start Chat</string>
 
     <string name="sendMessage">CDN Send</string>
+    <string name="fragDelete">Delete</string>
 </resources>

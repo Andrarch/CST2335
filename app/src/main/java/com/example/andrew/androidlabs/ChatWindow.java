@@ -1,8 +1,12 @@
 package com.example.andrew.androidlabs;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -24,15 +28,16 @@ public class ChatWindow extends Activity {
     ArrayList<String> javaMessages=new ArrayList<String>();
     AutoCompleteTextView javaText;
     ChatDatabaseHelper databaseHelp;
-
+    boolean chatFragment;
     SQLiteDatabase database;
     Cursor cursor;
+  //  private int ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         databaseHelp=new ChatDatabaseHelper(this);
         database= databaseHelp.getWritableDatabase();
-        cursor=database.rawQuery("SELECT Message FROM "+ChatDatabaseHelper.getTableName(),new String[]{});
+        cursor=database.rawQuery("SELECT "+ChatDatabaseHelper.KEY_MESSAGE+", "+ChatDatabaseHelper.KEY_ID+ " FROM "+ChatDatabaseHelper.getTableName(),new String[]{});
         cursor.moveToFirst();
         int column=cursor.getColumnIndex(ChatDatabaseHelper.KEY_MESSAGE);
         while(!cursor.isAfterLast() ){
@@ -60,7 +65,7 @@ public class ChatWindow extends Activity {
             cValues.put(ChatDatabaseHelper.KEY_MESSAGE,tempString);
             database.insert(ChatDatabaseHelper.getTableName(),ChatDatabaseHelper.KEY_MESSAGE,cValues);
         });
-
+        chatFragment= (findViewById(R.id.frameLayout)!=null);
 
     }
     @Override
@@ -89,12 +94,36 @@ public class ChatWindow extends Activity {
             else
                 result = inflater.inflate(R.layout.chat_row_outgoing, null);
             TextView message = (TextView)result.findViewById(R.id.textView);
+            message.setOnClickListener((t)->{
+
+                if(chatFragment){
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment fragment = new MessageFragment();
+                Bundle data = new Bundle();
+                data.putString("message", getItem(position));
+                data.putDouble("ID", getID(position));
+
+
+                fragmentTransaction.add(R.id.frameLayout, fragment);
+                fragmentTransaction.commit();
+                }
+                else{
+                    Intent intent = new Intent(ChatWindow.this,MessageDetailsActivity.class);
+                    intent.putExtra("message", getItem(position));
+                    intent.putExtra("ID", Double.valueOf(getID(position)));
+                    startActivityForResult(intent,position);
+                }
+            });
             message.setText(   getItem(position)  ); // get the string at position
             return result;
 
         }
         public long getID(int position){
-            return(position);
+            cursor.moveToPosition(position);
+            long temp=cursor.getLong(cursor.getColumnIndex(ChatDatabaseHelper.KEY_ID));
+
+            return(temp);
         }
 
     }

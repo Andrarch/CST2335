@@ -19,4 +19,5 @@
     <string name="startWeather">Weather Activity</string>
 
     <string name="sendMessage">Send</string>
+    <string name="fragDelete">Delete</string>
 </resources>

@@ -15,6 +15,7 @@ public class StartActivity extends Activity {
     protected static final String ACTIVITY_NAME = "StartActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         Log.i(ACTIVITY_NAME, "In onCreate()");
@@ -28,7 +29,7 @@ public class StartActivity extends Activity {
                 startActivityForResult(intent,50);
 
             }});
-
+            
 
         Button weatherButton=(Button)findViewById(R.id.startWeatherButton);
         weatherButton.setOnClickListener(new View.OnClickListener() {
