@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.TextView;
 
 public class MessageDetailsActivity extends Activity {
 
@@ -18,10 +19,13 @@ public class MessageDetailsActivity extends Activity {
         Fragment fragment = new MessageFragment();
         Bundle data = new Bundle();
         data.putString("message", getIntent().getStringExtra("message"));
-        data.putDouble("ID", getIntent().getIntExtra("id",-1));
-
+        data.putDouble("id", getIntent().getDoubleExtra("id",-100));
+        data.putBoolean("chatFragment",getIntent().getBooleanExtra("chatFragment",true));
+        fragment.setArguments(data);
 
         fragmentTransaction.add(R.id.detailsFrame, fragment);
         fragmentTransaction.commit();
+
+
     }
 }

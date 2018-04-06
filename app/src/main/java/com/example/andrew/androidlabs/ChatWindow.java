@@ -64,6 +64,8 @@ public class ChatWindow extends Activity {
             javaText.setText("");
             cValues.put(ChatDatabaseHelper.KEY_MESSAGE,tempString);
             database.insert(ChatDatabaseHelper.getTableName(),ChatDatabaseHelper.KEY_MESSAGE,cValues);
+            cursor=database.rawQuery("SELECT "+ChatDatabaseHelper.KEY_MESSAGE+", "+ChatDatabaseHelper.KEY_ID+ " FROM "+ChatDatabaseHelper.getTableName(),new String[]{});
+
         });
         chatFragment= (findViewById(R.id.frameLayout)!=null);
 
@@ -102,7 +104,8 @@ public class ChatWindow extends Activity {
                 Fragment fragment = new MessageFragment();
                 Bundle data = new Bundle();
                 data.putString("message", getItem(position));
-                data.putDouble("ID", getID(position));
+                data.putDouble("id", getID(position));
+                data.putBoolean("chatFragment",chatFragment);
 
 
                 fragmentTransaction.add(R.id.frameLayout, fragment);
@@ -111,8 +114,10 @@ public class ChatWindow extends Activity {
                 else{
                     Intent intent = new Intent(ChatWindow.this,MessageDetailsActivity.class);
                     intent.putExtra("message", getItem(position));
-                    intent.putExtra("ID", Double.valueOf(getID(position)));
+                    intent.putExtra("id", Double.valueOf(getID(position)));
+                    intent.putExtra("chatFragment",chatFragment);
                     startActivityForResult(intent,position);
+
                 }
             });
             message.setText(   getItem(position)  ); // get the string at position
@@ -125,6 +130,19 @@ public class ChatWindow extends Activity {
 
             return(temp);
         }
+
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String delete;
+        if (resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            delete = String.valueOf(extras.getDouble("delete"));
+            database.delete(ChatDatabaseHelper.getTableName(), ChatDatabaseHelper.KEY_ID+"=?", new String[] {delete} );
+            ChatAdapter messageAdapter =new ChatAdapter( this );
+            messageAdapter.notifyDataSetChanged();
+        }
+
 
     }
 }
