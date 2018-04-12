@@ -60,6 +60,10 @@ public class MessageFragment extends Fragment {
 
                     getActivity().setResult(Activity.RESULT_OK, resultIntent);
                     getActivity().finish();
+                }else{
+                    ChatWindow.deleteEntry(String.valueOf(getArguments().getDouble("id", -100)));
+                    text.setText("");
+                    id.setText("");
                 }
                 Log.i("DeleteButton", "Delete Button Pressed from Fragment" );
             });

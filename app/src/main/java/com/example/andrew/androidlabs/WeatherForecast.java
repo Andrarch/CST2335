@@ -2,6 +2,7 @@ package com.example.andrew.androidlabs;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -137,11 +138,14 @@ public class WeatherForecast extends Activity {
 
         public void setBitmap(String url) {
 
-            weatherImage=HttpUtils.getImage(url);
+            FileOutputStream fos = null;
+
+
             if (!fileExistance(filename)){
-                Bitmap image  = HttpUtils.getImage(filename);
+
+                Bitmap image  = HttpUtils.getImage(bitMap);
                 try{
-                    FileOutputStream outputStream = openFileOutput( url, Context.MODE_PRIVATE);
+                    FileOutputStream outputStream = openFileOutput( filename, Context.MODE_PRIVATE);
                     image.compress(Bitmap.CompressFormat.PNG, 80, outputStream);
                     outputStream.flush();
                     outputStream.close();

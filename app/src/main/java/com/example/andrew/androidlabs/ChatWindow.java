@@ -23,20 +23,23 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class ChatWindow extends Activity {
-    ListView javaListView;
+    static ListView javaListView;
     Button javaSendButton;
-    ArrayList<String> javaMessages=new ArrayList<String>();
-    AutoCompleteTextView javaText;
+    static ArrayList<String> javaMessages=new ArrayList<String>();
+    static AutoCompleteTextView javaText;
     ChatDatabaseHelper databaseHelp;
     boolean chatFragment;
-    SQLiteDatabase database;
-    Cursor cursor;
+    static SQLiteDatabase database;
+    static Cursor cursor;
+    static ChatAdapter messageAdapter;
   //  private int ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        javaMessages=new ArrayList<String>();
         databaseHelp=new ChatDatabaseHelper(this);
         database= databaseHelp.getWritableDatabase();
+        messageAdapter =new ChatAdapter( this );
         cursor=database.rawQuery("SELECT "+ChatDatabaseHelper.KEY_MESSAGE+", "+ChatDatabaseHelper.KEY_ID+ " FROM "+ChatDatabaseHelper.getTableName(),new String[]{});
         cursor.moveToFirst();
         int column=cursor.getColumnIndex(ChatDatabaseHelper.KEY_MESSAGE);
@@ -53,7 +56,6 @@ public class ChatWindow extends Activity {
         setContentView(R.layout.activity_chat_window);
         javaListView=(ListView)findViewById(R.id.listView);
         javaSendButton=(Button)findViewById(R.id.sendButton);
-        ChatAdapter messageAdapter =new ChatAdapter( this );
         javaListView.setAdapter (messageAdapter);
         javaText=(AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
         ContentValues cValues=new ContentValues();
@@ -106,7 +108,7 @@ public class ChatWindow extends Activity {
                 data.putString("message", getItem(position));
                 data.putDouble("id", getID(position));
                 data.putBoolean("chatFragment",chatFragment);
-
+                fragment.setArguments(data);
 
                 fragmentTransaction.add(R.id.frameLayout, fragment);
                 fragmentTransaction.commit();
@@ -138,11 +140,23 @@ public class ChatWindow extends Activity {
         if (resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             delete = String.valueOf(extras.getDouble("delete"));
-            database.delete(ChatDatabaseHelper.getTableName(), ChatDatabaseHelper.KEY_ID+"=?", new String[] {delete} );
-            ChatAdapter messageAdapter =new ChatAdapter( this );
-            messageAdapter.notifyDataSetChanged();
+            deleteEntry(delete);
         }
 
 
+    }
+    public static void deleteEntry(String delete){
+        database.delete(ChatDatabaseHelper.getTableName(), ChatDatabaseHelper.KEY_ID+"=?", new String[] {delete} );
+        javaMessages=new ArrayList<String>();
+
+        cursor=database.rawQuery("SELECT "+ChatDatabaseHelper.KEY_MESSAGE+", "+ChatDatabaseHelper.KEY_ID+ " FROM "+ChatDatabaseHelper.getTableName(),new String[]{});
+        cursor.moveToFirst();
+        int column=cursor.getColumnIndex(ChatDatabaseHelper.KEY_MESSAGE);
+        while(!cursor.isAfterLast() ){
+            Log.i("ChatWindow", "SQL Message:" + cursor.getString( cursor.getColumnIndex( ChatDatabaseHelper.KEY_MESSAGE) ) );
+            javaMessages.add(cursor.getString(column));
+            cursor.moveToNext();
+        }
+        messageAdapter.notifyDataSetChanged();
     }
 }
