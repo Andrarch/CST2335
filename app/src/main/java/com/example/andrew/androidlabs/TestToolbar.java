@@ -93,15 +93,16 @@ public class TestToolbar extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         // Get the layout inflater
         LayoutInflater inflater = this.getLayoutInflater();
-
+        View inflated=inflater.inflate(R.layout.custom_dialog, null);
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
-        builder.setView(inflater.inflate(R.layout.custom_dialog, null))
+        builder.setView(inflated)
                 // Add action buttons
                 .setPositiveButton(R.string.setMessage, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        TextView text=findViewById(R.id.customText);
+
+                        TextView text=inflated.findViewById(R.id.customText);
                         if(text!=null){
                         message=text.getText().toString(); }
                     }
