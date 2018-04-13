@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_one"
+        android:icon="@drawable/additional"
+        android:orderInCategory="101"
+        android:title="One"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_two"
+        android:icon="@drawable/blackhat"
+        android:orderInCategory="101"
+        android:title="two"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_three"
+        android:icon="@drawable/dangerouscurrent"
+        android:orderInCategory="101"
+        android:title="three"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_four"
+        android:orderInCategory="101"
+        android:title="Information"
+        app:showAsAction="never" />
+
+</menu>

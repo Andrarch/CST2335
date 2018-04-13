@@ -21,4 +21,9 @@
 
     <string name="sendMessage">CDN Send</string>
     <string name="fragDelete">Delete</string>
+    <string name="startToolBar">Toolbar Activity</string>
+    <string name="goBack">Do you want to go back?</string>
+    <string name="exit">Exit</string>
+    <string name="setMessage">Set Message</string>
+    <string name="cancelMessage">Cancel</string>
 </resources>
